@@ -46,7 +46,10 @@ public abstract class FastIOTemplate {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			return stringTokenizer.nextToken();
+			if (stringTokenizer.hasMoreTokens())
+				return stringTokenizer.nextToken();
+			else
+				return next();
 		}
 
 		int nextInt() {
