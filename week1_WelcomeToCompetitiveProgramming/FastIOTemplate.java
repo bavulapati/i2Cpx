@@ -1,6 +1,7 @@
 package course.i2cpx.edx;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -8,53 +9,51 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-public abstract class FastIOTemplate {
+public abstract class FastIOTemplate implements Closeable {
 	FastScanner input;
 	PrintWriter output;
 
-	public abstract void solve() throws IOException;
+	abstract void solve() throws NumberFormatException, IOException;
 
-	public void run() {
+	void run() throws NumberFormatException, IOException {
 		input = new FastScanner(new File("input.txt"));
-		try {
-			output = new PrintWriter(new File("output.txt"));
-			solve();
-			output.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		output = new PrintWriter(new File("output.txt"));
+		solve();
 	}
 
-	class FastScanner {
+	class FastScanner implements Closeable {
 		BufferedReader bufferedReader;
 		StringTokenizer stringTokenizer;
 
-		FastScanner(File inputFile) {
-			try {
-				bufferedReader = new BufferedReader(new FileReader(inputFile));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+		FastScanner(File inputFile) throws FileNotFoundException {
+			bufferedReader = new BufferedReader(new FileReader(inputFile));
+
+		}
+
+		String next() throws IOException {
+			while (stringTokenizer == null || !stringTokenizer.hasMoreTokens()) {
+				String line = bufferedReader.readLine();
+				if (line == null)
+					return null;
+				stringTokenizer = new StringTokenizer(line);
 			}
+			return stringTokenizer.nextToken();
 		}
 
-		String next() {
-			if (stringTokenizer == null || !stringTokenizer.hasMoreTokens())
-				try {
-					stringTokenizer = new StringTokenizer(
-							bufferedReader.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			if (stringTokenizer.hasMoreTokens())
-				return stringTokenizer.nextToken();
-			else
-				return next();
-		}
-
-		int nextInt() {
+		int nextInt() throws NumberFormatException, IOException {
 			return Integer.parseInt(next());
+		}
+
+		@Override
+		public void close() throws IOException {
+			bufferedReader.close();
+			stringTokenizer = null;
 		}
 	}
 
+	@Override
+	public void close() throws IOException {
+		input.close();
+		output.close();
+	}
 }
