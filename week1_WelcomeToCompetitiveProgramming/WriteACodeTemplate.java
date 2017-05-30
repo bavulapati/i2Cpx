@@ -1,5 +1,6 @@
 package course.i2cpx.edx;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class WriteACodeTemplate extends FastIOTemplate {
@@ -17,11 +18,13 @@ public class WriteACodeTemplate extends FastIOTemplate {
 	int i;
 	HashMap<Integer, CharPosition> alphabet = new HashMap<>();
 
-	public static void main(String[] args) {
-		new WriteACodeTemplate().run();
+	public static void main(String[] args) throws IOException {
+		try (WriteACodeTemplate aCodeTemplate = new WriteACodeTemplate()) {
+			aCodeTemplate.run();
+		}
 	}
 
-	int nextChar() {
+	int nextChar() throws IOException {
 		if (chars == null || i == chars.length()) {
 			chars = input.next();
 			i = 0;
@@ -37,7 +40,7 @@ public class WriteACodeTemplate extends FastIOTemplate {
 	}
 
 	@Override
-	void solve() {
+	void solve() throws NumberFormatException, IOException {
 		int w = input.nextInt();
 		int h = input.nextInt();
 		for (int i = h; i > 0; i--)
