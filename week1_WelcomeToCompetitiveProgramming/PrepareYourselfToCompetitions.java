@@ -42,7 +42,9 @@ public class PrepareYourselfToCompetitions extends FastIOTemplate {
 		output.println(productivity);
 	}
 
-	public static void main(String[] args) {
-		new PrepareYourselfToCompetitions().run();
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		try (PrepareYourselfToCompetitions prepareYourselfToCompetitions = new PrepareYourselfToCompetitions()) {
+			prepareYourselfToCompetitions.run();
+		}
 	}
 }
